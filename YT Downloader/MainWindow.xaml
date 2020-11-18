@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:YT_Downloader"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="YT_Downloader.MainWindow"
         mc:Ignorable="d"
-        Title="YT Downloader" Height="621.5" Width="928" WindowStyle="None" WindowStartupLocation="CenterScreen" SizeChanged="Window_SizeChanged">
+        Title="YT Downloader" Style="{StaticResource WindowStyle}" Height="621.5" Width="928" WindowStyle="None" WindowStartupLocation="CenterScreen" SizeChanged="Window_SizeChanged" Loaded="Window_Loaded" LostFocus="Window_LostFocus" Activated="Window_Activated">
 
     <Window.Resources>
         <Style x:Key="PagesButtonsStyle" TargetType="{x:Type Button}">
@@ -19,7 +19,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ButtonBase}">
-                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <Border x:Name="border" BorderBrush="White" BorderThickness="1" SnapsToDevicePixels="True" Background="White">
                             <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -30,41 +30,6 @@
                                 <Setter Property="Background" TargetName="border" Value="#FFEEEEEE"/>
                             </Trigger>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter Property="Background" TargetName="border" Value="#FFEEEEEE"/>
-                            </Trigger>
-                            <Trigger Property="ToggleButton.IsChecked" Value="True">
-                                <Setter Property="Background" TargetName="border" Value="#FFBCDDEE"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="#FF245A83"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Background" TargetName="border" Value="#FFF4F4F4"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="#FFADB2B5"/>
-                                <Setter Property="Foreground" Value="#FF838383"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="TitleBarButtonsStyle" TargetType="{x:Type Button}">
-            <Setter Property="Width" Value="30"/>
-            <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
-            <Setter Property="Foreground" Value="#999999"/>
-            <Setter Property="Background" Value="#EEE"/>
-            <Setter Property="BorderBrush" Value="{x:Null}"/>
-            <Setter Property="Focusable" Value="False"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ButtonBase}">
-                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                            <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="Button.IsDefaulted" Value="True">
-                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" TargetName="border" Value="#FFD8D8D8"/>
                             </Trigger>
                             <Trigger Property="ToggleButton.IsChecked" Value="True">
                                 <Setter Property="Background" TargetName="border" Value="#FFBCDDEE"/>
@@ -115,7 +80,7 @@
                                 <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                             </Border>
                             <Border Visibility="Collapsed"  x:Name="NotificationBorder" Padding="3" Height="15" MinWidth="15" Background="#F00" CornerRadius="8" VerticalAlignment="Top" HorizontalAlignment="Right">
-                                <TextBlock FontFamily="Segeo UI" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" Height="18.733" Margin="0,-2.7,0,-7.033"><Run Text="2"/></TextBlock>
+                                <TextBlock x:Name="NotificationCountTBl" FontFamily="Segeo UI" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" Height="Auto" Margin="0,-1" >2</TextBlock>
                             </Border>
                         </Grid>
                         <ControlTemplate.Triggers>
@@ -123,7 +88,6 @@
                                 <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                             </Trigger>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter Property="Background" TargetName="border" Value="#FFEEEEEE"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="true">
                                 <Setter Property="Background" TargetName="border" Value="#EEE "/>
@@ -149,11 +113,11 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Grid>
-                            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                            <Border x:Name="border" BorderBrush="White" BorderThickness="1" SnapsToDevicePixels="True" Background="White">
                                 <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                             </Border>
-                            <Border Visibility="Collapsed" x:Name="NotificationBorder" Padding="3" Height="15" MinWidth="15" Background="#F00" CornerRadius="8" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,5.75,0">
-                                <TextBlock FontFamily="Segeo UI" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" Height="18.733" Margin="0,-2.7,0,-7.033" Text="3"/>
+                            <Border RenderOptions.BitmapScalingMode="HighQuality" Visibility="Visible" x:Name="NotificationBorder" Padding="3" Height="15" MinWidth="15" Background="#F00" CornerRadius="8" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,5.75,0">
+                                <TextBlock x:Name="NotificationNumberTBl" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" Height="Auto" Text="7"/>
                             </Border>
                         </Grid>
                         <ControlTemplate.Triggers>
@@ -161,7 +125,6 @@
                                 <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                             </Trigger>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter Property="Background" TargetName="border" Value="#FFEEEEEE"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" TargetName="border" Value="#FFEEEEEE"/>
@@ -192,7 +155,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                        <Border x:Name="border" CornerRadius="3" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
                             <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -208,9 +171,9 @@
                                 <Setter Property="BorderBrush" TargetName="border" Value="#FF63B2FF"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Background" TargetName="border" Value="#C8C8C8"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="#C8C8C8"/>
-                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="#939393"/>
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -220,44 +183,6 @@
         <SolidColorBrush x:Key="TextBox.Static.Border" Color="#FFABAdB3"/>
         <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#FF7EB4EA"/>
         <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF569DE5"/>
-        <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
-            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="AllowDrop" Value="true"/>
-            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
-            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TextBox}">
-                        <Border x:Name="border" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True" BorderBrush="#FFCCCCCC">
-                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
-                            </Trigger>
-                            <Trigger Property="IsKeyboardFocused" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="#1E90FF"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
-                        <Condition Property="IsSelectionActive" Value="false"/>
-                    </MultiTrigger.Conditions>
-                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
-                </MultiTrigger>
-            </Style.Triggers>
-        </Style>
         <LinearGradientBrush x:Key="ComboBox.Static.Background" EndPoint="0,1" StartPoint="0,0">
             <GradientStop Color="#FFF0F0F0" Offset="0.0"/>
             <GradientStop Color="#FFE5E5E5" Offset="1.0"/>
@@ -311,7 +236,7 @@
                     <ControlTemplate TargetType="{x:Type ToggleButton}">
                         <Border x:Name="templateRoot" SnapsToDevicePixels="true" Background="White" BorderBrush="#FFCCCCCC" BorderThickness="2">
                             <Border x:Name="splitBorder" Width="40" SnapsToDevicePixels="true" Margin="0" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="Transparent">
-                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="arrow" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="#FFCCCCCC">&#xE09D;</TextBlock>
+                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="arrow" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="#FFCCCCCC" FontWeight="Bold">&#xE09D;</TextBlock>
                             </Border>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -332,7 +257,7 @@
                                     <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
                                     <Condition Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}}" Value="false"/>
                                 </MultiDataTrigger.Conditions>
-                                <Setter Property="Background" TargetName="templateRoot" Value="#E0EBFF"/>
+                                <Setter Property="Background" TargetName="templateRoot" Value="AliceBlue"/>
                             </MultiDataTrigger>
                             <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
@@ -533,6 +458,7 @@
         <SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Background" Color="#5426A0DA"/>
         <SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Border" Color="#FF26A0DA"/>
         <Style TargetType="{x:Type ComboBoxItem}">
+            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"></Setter>
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="Padding" Value="4,1"/>
@@ -558,8 +484,7 @@
                                     <Condition Property="IsMouseOver" Value="True"/>
                                     <Condition Property="IsKeyboardFocused" Value="False"/>
                                 </MultiTrigger.Conditions>
-                                <Setter Property="Background" TargetName="Bd" Value="#70a1ff"/>
-                                <Setter Property="TextElement.Foreground" TargetName="cp" Value="White"></Setter>
+                                <Setter Property="Background" TargetName="Bd" Value="#EEE"/>
                             </MultiTrigger>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
@@ -596,9 +521,8 @@
                                     <Condition Property="IsMouseOver" Value="False"/>
                                     <Condition Property="IsKeyboardFocused" Value="True"/>
                                 </MultiTrigger.Conditions>
-                                <Setter Property="Background" TargetName="Bd" Value="#70a1ff"/>
-                                <Setter Property="BorderBrush" TargetName="Bd" Value="#70a1ff"/>
-                                <Setter Property="TextElement.Foreground" TargetName="cp" Value="White"></Setter>
+                                <Setter Property="Background" TargetName="Bd" Value="#EEE"/>
+                                <Setter Property="BorderBrush" TargetName="Bd" Value="#EEE"/>
                             </MultiTrigger>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
@@ -606,9 +530,8 @@
                                     <Condition Property="IsMouseOver" Value="True"/>
                                     <Condition Property="IsKeyboardFocused" Value="True"/>
                                 </MultiTrigger.Conditions>
-                                <Setter Property="Background" TargetName="Bd" Value="#70a1ff"/>
-                                <Setter Property="BorderBrush" TargetName="Bd" Value="#70a1ff"/>
-                                <Setter Property="TextElement.Foreground" TargetName="cp" Value="White"></Setter>
+                                <Setter Property="Background" TargetName="Bd" Value="#EEE"/>
+                                <Setter Property="BorderBrush" TargetName="Bd" Value="#EEE"/>
                             </MultiTrigger>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
@@ -617,6 +540,73 @@
                                     <Condition Property="IsKeyboardFocused" Value="False"/>
                                 </MultiTrigger.Conditions>
                             </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="MenusButtonsStyle" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="#FF1E90FF"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#FF1E90FF"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="White"></Setter>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ClearAllButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="#ff4757"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -659,57 +649,120 @@
 
         <DockPanel Grid.Row="1" Background="White" LastChildFill="False">
             <Rectangle Width="10px"/>
-            <Border SnapsToDevicePixels="True" DockPanel.Dock="Left" Height="40" Width="40" CornerRadius="40" Background="#FF4A4A4A">
+            <Border RenderOptions.BitmapScalingMode="HighQuality"  SnapsToDevicePixels="True" DockPanel.Dock="Left" Height="40" Width="40" CornerRadius="40" Background="#FF4A4A4A">
                 <TextBlock FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" Foreground="White" FontSize="16"><Run Text="&#xE77B;"/></TextBlock>
             </Border>
             <Rectangle Width="8"/>
             <StackPanel VerticalAlignment="Center" DockPanel.Dock="Left" Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock x:Name="UsernameTBl" FontSize="17" Foreground="#FF4F4F4F" FontWeight="SemiBold" VerticalAlignment="Center"><Run Text="Mohamad Hag"/><LineBreak/><Run/><InlineUIContainer>
-                            <TextBlock x:Name="AcconutPerferencesTBl" Text="Preferences" Foreground="#FF8C8C8C" FontSize="13" Cursor="Hand" Width="Auto" HorizontalAlignment="Left"/>
+                    <TextBlock RenderOptions.BitmapScalingMode="HighQuality" FontSize="17" Foreground="#FF4F4F4F" FontWeight="SemiBold" VerticalAlignment="Center" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito Black"><Run x:Name="UsernameRN" Text="Username" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito ExtraBold"/><LineBreak/><Run/><InlineUIContainer>
+                            <TextBlock Focusable="True" FocusVisualStyle="{x:Null}" x:Name="AcconutPerferencesTBl" Text="Preferences" Foreground="#FF8C8C8C" FontSize="15" Cursor="Hand" Width="Auto" HorizontalAlignment="Left" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito Light" MouseLeftButtonUp="AcconutPerferencesTBl_MouseLeftButtonUp" Background="White" MouseEnter="AcconutPerferencesTBl_MouseEnter"/>
                         </InlineUIContainer></TextBlock>
-                    <Button FocusVisualStyle="{x:Null}" Margin="10,0,0,0" Width="40" Height="40" FontFamily="Segoe MDL2 Assets" Foreground="#FFA4A4A4" Style="{DynamicResource NotificationButtonStyle}" FontSize="20" Content="&#xEA8F;"/>
+                    <Button x:Name="ViewNotificationsB" FocusVisualStyle="{x:Null}" Margin="10,0,0,0" Width="40" Height="40" FontFamily="Segoe MDL2 Assets" Foreground="#FFA4A4A4" Style="{DynamicResource NotificationButtonStyle}" FontSize="20" Content="&#xEA8F;" Click="ViewNotificationsB_Click"/>
+                    <Label x:Name="UserIdLB" VerticalContentAlignment="Center" Visibility="Collapsed">0</Label>
                 </StackPanel>
             </StackPanel>
             <Rectangle Width="1" Fill="#C8C8C8" Height="40" Margin="30,0,30,0"/>
-            <Button FocusVisualStyle="{x:Null}" Style="{DynamicResource DownloadPageBStyle}" Content="&#xE896;"/>
-            <Button FocusVisualStyle="{x:Null}" Style="{StaticResource PagesButtonsStyle}" Content="&#xE713;"/>
+            <Button x:Name="ViewDownloadsB" FocusVisualStyle="{x:Null}" Style="{DynamicResource DownloadPageBStyle}" Content="&#xE896;" Click="ViewDownloadsB_Click"/>
+            <Button x:Name="ViewSettingsB" FocusVisualStyle="{x:Null}" Style="{StaticResource PagesButtonsStyle}" Content="&#xE713;" Click="ViewSettingsB_Click"/>
+            <Border x:Name="MessageBorder" Padding="10,0,10,0" Height="50px" DockPanel.Dock="Right" Margin="0,0,10,0" Background="#FFF9EFC3" Opacity="0 " Visibility="Collapsed" CornerRadius="5" BorderBrush="#FFEEB800" BorderThickness="1.5">
+                <DockPanel VerticalAlignment="Center">
+                    <Label x:Name="MessageIconLB" FontFamily="Segoe MDL2 Assets" Content="&#xEA39;" VerticalAlignment="Center" DockPanel.Dock="Left" FontSize="20" Foreground="{Binding Path=BorderBrush ,ElementName=MessageBorder}"></Label>
+                    <Label x:Name="MessageLB" VerticalAlignment="Center" VerticalContentAlignment="Center" MaxWidth="500" Padding="10,0,0,0" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold" Foreground="{Binding Path=BorderBrush, ElementName=MessageBorder}" FontSize="15" Content="Something went wrong, Please try again later"/>
+                </DockPanel>
+            </Border>
         </DockPanel>
-        <Grid Grid.Row="3">
-            <TextBlock Height="Auto" Width="Auto" Text="Video Url" VerticalAlignment="Top" Margin="20,14.5,0,0" FontSize="17" FontWeight="SemiBold"/>
-            <TextBox x:Name="UrlTB" BorderThickness="2" VerticalContentAlignment="Center" Padding="5" FontSize="18" Height="35" Margin="20,44,126.13,0" VerticalAlignment="Top" Style="{DynamicResource TextBoxStyle}" TextChanged="UrlTB_TextChanged">
-                <TextBox.CommandBindings>
+        <ScrollViewer Grid.Row="3" >
+            <Border Padding="5">
+                <Grid Background="White">
+                    <TextBlock Height="Auto" Width="Auto" Text="Video Url" VerticalAlignment="Top" Margin="20,14.5,0,0" FontSize="17" FontWeight="SemiBold" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold" Foreground="#FF444444"/>
+                    <TextBox x:Name="UrlTB" BorderThickness="2" VerticalContentAlignment="Center" Padding="5" FontSize="15" Height="35" Margin="20,44,107,0" VerticalAlignment="Top" Style="{DynamicResource TextBoxStyle}" TextChanged="UrlTB_TextChanged" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold" SelectionBrush="#FFA7D6FF" KeyDown="UrlTB_KeyDown">
+                        <!--<TextBox.CommandBindings>
                     <CommandBinding Command="{x:Static local:CustomShortcutsCommands.Check}" Executed="Check_Executed"></CommandBinding>
                 </TextBox.CommandBindings>
                 <TextBox.InputBindings>
                     <KeyBinding Command="{x:Static local:CustomShortcutsCommands.Check}" Key="S" Modifiers="Ctrl"></KeyBinding>
-                </TextBox.InputBindings>
-            </TextBox>
-            <Button x:Name="CheckB" IsEnabled="False" Content="Check" HorizontalAlignment="Right" Height="35" Margin="0,44,20,0" VerticalAlignment="Top" Padding="25,0,25,0" FontSize="18" RenderTransformOrigin="0.759,0.7" BorderBrush="DodgerBlue" Background="DodgerBlue" Foreground="White" Style="{DynamicResource DefaultButtonsStyle}" FontWeight="SemiBold" Click="CheckB_Click"/>
-            <TextBlock Height="Auto" Width="Auto" Text="Quality" VerticalAlignment="Top" Margin="20,106,0,0" FontSize="17" FontWeight="SemiBold"/>
-            <ComboBox FocusVisualStyle="{x:Null}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="5" FontSize="18" Height="35" Margin="20,135.5,0,0" Width="130" VerticalAlignment="Top" HorizontalAlignment="Left" Style="{DynamicResource QualityComboBoxStyle}" BorderBrush="#CCCCCCCC">
-                <ComboBoxItem FocusVisualStyle="{x:Null}" Height="30" Content="1080p"/>
-                <ComboBoxItem FocusVisualStyle="{x:Null}" Height="30" Content="720p"/>
-                <ComboBoxItem FocusVisualStyle="{x:Null}" Height="30" Content="480p"/>
-                <ComboBoxItem FocusVisualStyle="{x:Null}" Height="30" Content="240p"/>
-                <ComboBoxItem FocusVisualStyle="{x:Null}" Height="30" Content="144p"/>
-            </ComboBox>
-            <TextBlock Height="Auto" Width="Auto" Text="Size" VerticalAlignment="Top" Margin="20,307.329,0,0" FontSize="17" FontWeight="SemiBold" HorizontalAlignment="Left"/>
-            <TextBlock Height="Auto" Width="Auto" Text="Length" VerticalAlignment="Top" Margin="20,354.329,0,0" FontSize="17" FontWeight="SemiBold" HorizontalAlignment="Left"/>
-            <Border Padding="10" Height="30" MinWidth="15" Background="#FFE0EBFF" CornerRadius="8" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="132.061,304.372,0,0">
-                <TextBlock FontFamily="Segeo UI" Foreground="#FF2B2B2B" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" Height="18.733" Margin="0,-2.7,0,-7.033" Text="200 MB"/>
+                </TextBox.InputBindings>-->
+                    </TextBox>
+                    <Button BorderThickness="1" x:Name="CheckB" IsEnabled="False" Content="Check" HorizontalAlignment="Right" Height="35" Margin="0,44,0,0" VerticalAlignment="Top" Padding="25,0,25,0" FontSize="18" RenderTransformOrigin="0.759,0.7" BorderBrush="DodgerBlue" Background="DodgerBlue" Foreground="White" Style="{DynamicResource DefaultButtonsStyle}" Click="CheckB_Click" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold"/>
+                    <TextBlock HorizontalAlignment="Left" Height="Auto" Width="Auto" Text="Format" VerticalAlignment="Top" Margin="20,204,0,0" FontSize="17" FontWeight="SemiBold" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold" Foreground="#FF444444"/>
+                    <ComboBox x:Name="QualityCBX" FocusVisualStyle="{x:Null}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="5" FontSize="18" Height="35" Margin="179.999,233.5,0,0" Width="130" VerticalAlignment="Top" HorizontalAlignment="Left" Style="{DynamicResource QualityComboBoxStyle}" BorderBrush="#CCCCCCCC" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold">
+                        <ComboBoxItem FocusVisualStyle="{x:Null}" Height="30" Content="1080p"/>
+                        <ComboBoxItem FocusVisualStyle="{x:Null}" Height="30" Content="720p"/>
+                        <ComboBoxItem FocusVisualStyle="{x:Null}" Height="30" Content="480p"/>
+                        <ComboBoxItem IsSelected="True" FocusVisualStyle="{x:Null}" Height="30" Content="240p"/>
+                        <ComboBoxItem FocusVisualStyle="{x:Null}" Height="30" Content="144p"/>
+                    </ComboBox>
+                    <TextBlock Height="Auto" Width="Auto" Text="Size" VerticalAlignment="Top" Margin="20,307.329,0,0" FontSize="17" FontWeight="SemiBold" HorizontalAlignment="Left" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold" Foreground="#FF444444"/>
+                    <TextBlock Height="Auto" Width="Auto" Text="Length" VerticalAlignment="Top" Margin="20,354.329,0,0" FontSize="17" FontWeight="SemiBold" HorizontalAlignment="Left" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold" Foreground="#FF444444"/>
+                    <Border Padding="10" Height="30" MinWidth="15" Background="#FFE0EBFF" CornerRadius="8" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="132.061,304.372,0,0" BorderBrush="Black">
+                        <Label Padding="0" x:Name="VideoSizeLB" FontFamily="Segeo UI" Foreground="#FF2B2B2B" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" FontSize="15" Height="18.733" Margin="0,-2.7,0,-7.033" Content="0 KB"/>
+                    </Border>
+                    <Border x:Name="VideoLengthTBl" Padding="10" Height="30" MinWidth="15" Background="#FFE0EBFF" CornerRadius="8" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="132.061,351.372,0,0" BorderBrush="Black">
+                        <Label Padding="0" x:Name="VideoLengthLB" FontFamily="Segeo UI" Foreground="#FF2B2B2B" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center" FontSize="15" Height="18.733" Margin="0,-2.7,0,-7.033" Content="00:00:00"/>
+                    </Border>
+                    <TextBlock HorizontalAlignment="Left" Height="Auto" Width="Auto" Text="Quality" VerticalAlignment="Top" Margin="179.998,204,0,0" FontSize="17" FontWeight="SemiBold" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold" Foreground="#FF444444"/>
+                    <ComboBox x:Name="FormatCBX" FocusVisualStyle="{x:Null}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="5" FontSize="18" Height="35" Margin="20,233.5,0,0" Width="130" VerticalAlignment="Top" HorizontalAlignment="Left" Style="{DynamicResource QualityComboBoxStyle}" BorderBrush="#CCCCCCCC" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold">
+                        <ComboBoxItem IsSelected="True" FocusVisualStyle="{x:Null}" Height="30" Content="MP3"/>
+                        <ComboBoxItem FocusVisualStyle="{x:Null}" Height="30" Content="MP4"/>
+                    </ComboBox>
+                    <TextBlock Height="Auto" Width="Auto" Text="Download location" VerticalAlignment="Top" Margin="20,110.5,0,0" FontSize="17" FontWeight="SemiBold" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold" Foreground="#FF444444"/>
+                    <TextBox IsReadOnly="True" x:Name="BrowseTB" BorderThickness="2" VerticalContentAlignment="Center" Padding="5" FontSize="15" Height="35" Margin="20,140,119,0" VerticalAlignment="Top" Style="{DynamicResource TextBoxStyle}" TextChanged="UrlTB_TextChanged" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold" SelectionBrush="#FFA7D6FF" KeyDown="UrlTB_KeyDown" Text="C:\Users\HP\Downloads">
+                        <!--<TextBox.CommandBindings>
+                    <CommandBinding Command="{x:Static local:CustomShortcutsCommands.Check}" Executed="Check_Executed"></CommandBinding>
+                </TextBox.CommandBindings>
+                <TextBox.InputBindings>
+                    <KeyBinding Command="{x:Static local:CustomShortcutsCommands.Check}" Key="S" Modifiers="Ctrl"></KeyBinding>
+                </TextBox.InputBindings>-->
+                    </TextBox>
+                    <Button x:Name="BrowseB" FocusVisualStyle="{x:Null}" IsEnabled="True" Content="Browse" HorizontalAlignment="Right" Height="35" Margin="0,140,0,0" VerticalAlignment="Top" Padding="25,0,25,0" FontSize="18" RenderTransformOrigin="0.759,0.7" BorderBrush="DodgerBlue" Background="DodgerBlue" Foreground="White" Style="{DynamicResource DefaultButtonsStyle}" Click="BrowseB_Click" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold"/>
+                    <local:CircleLoader x:Name="CheckCL" Visibility="Collapsed" Background="White"></local:CircleLoader>
+                </Grid>
             </Border>
-            <Border Padding="10" Height="30" MinWidth="15" Background="#FFE0EBFF" CornerRadius="8" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="132.061,351.372,0,0">
-                <TextBlock FontFamily="Segeo UI" Foreground="#FF2B2B2B" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" Height="18.733" Margin="0,-2.7,0,-7.033" Text="30 : 43"/>
-            </Border>
-            <TextBlock Height="Auto" Width="Auto" Text="Format" VerticalAlignment="Top" Margin="20,204,0,0" FontSize="17" FontWeight="SemiBold"/>
-            <ComboBox FocusVisualStyle="{x:Null}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="5" FontSize="18" Height="35" Margin="20,233.5,0,0" Width="130" VerticalAlignment="Top" HorizontalAlignment="Left" Style="{DynamicResource QualityComboBoxStyle}" BorderBrush="#CCCCCCCC">
-                <ComboBoxItem FocusVisualStyle="{x:Null}" Height="30" Content="MP3"/>
-                <ComboBoxItem FocusVisualStyle="{x:Null}" Height="30" Content="MP4"/>
-            </ComboBox>
-        </Grid>
+        </ScrollViewer>
         <Grid Grid.Row="4" Background="#FFEEEEEE">
-            <Button IsEnabled="False" Content="Download" HorizontalAlignment="Right" Height="35" VerticalAlignment="Center" Padding="25,0,25,0" FontSize="18" Margin="0,0,20,0" Foreground="White" Background="DodgerBlue" BorderBrush="DodgerBlue" Style="{DynamicResource DefaultButtonsStyle}" FontWeight="SemiBold" />
+            <Button x:Name="DownloadB" BorderThickness="1.5" IsEnabled="False" Content="Download" HorizontalAlignment="Right" Height="35" VerticalAlignment="Center" Padding="25,0,25,0" FontSize="18" Margin="0,0,20,0" Foreground="White" Background="DodgerBlue" BorderBrush="DodgerBlue" Style="{DynamicResource DefaultButtonsStyle}" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold" Click="DownloadB_Click" />
+        </Grid>
+        <Grid x:Name="CoverG" Grid.RowSpan="2" Grid.Row="3" Background="White" Visibility="Collapsed"></Grid>
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Grid.Row="3" Grid.RowSpan="2" Background="White">
+            <Frame.RenderTransform>
+                <TranslateTransform x:Name="FrameTransform" X="-928"/>
+            </Frame.RenderTransform>
+        </Frame>
+        <Grid x:Name="PerferencesG" Grid.RowSpan="5" Visibility="Collapsed">
+            <Grid x:Name="PerferencesOpacityG" Background="Black" Opacity="0.2" MouseLeftButtonUp="PerferencesOpacityG_MouseLeftButtonUp" MouseEnter="PerferencesOpacityG_MouseEnter" MouseLeave="PerferencesOpacityG_MouseLeave"></Grid>
+            <Border x:Name="PerferencesBorder" Visibility="Visible" CornerRadius="2" Padding="0,5" Width="140" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="54.166,99.161,0,0" Background="#FFF9F9F9" BorderThickness="1.5">
+                <StackPanel>
+                    <Button FocusVisualStyle="{x:Null}" x:Name="EditProfileB" BorderBrush="{x:Null}" Padding="9.6,5,1,5" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito Light" FontSize="15" Content="Edit profile..." Background="#FFF9F9F9" Foreground="#FF3E3E3E" Style="{DynamicResource MenusButtonsStyle}" HorizontalContentAlignment="Left" Click="EditProfileB_Click"/>
+                    <Button FocusVisualStyle="{x:Null}" x:Name="DeleteAccountB" BorderBrush="{x:Null}" Padding="9.6,5,1,5" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito Light" FontSize="15" Content="Delete account" Background="#FFF9F9F9" Foreground="#FF3E3E3E" Style="{DynamicResource MenusButtonsStyle}" HorizontalContentAlignment="Left" Click="DeleteAccountB_Click"/>
+                    <Button FocusVisualStyle="{x:Null}" x:Name="ClearDataB" BorderBrush="{x:Null}" Padding="9.6,5,1,5" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito Light" FontSize="15" Content="Clear data" Background="#FFF9F9F9" Foreground="#FF3E3E3E" Style="{DynamicResource MenusButtonsStyle}" HorizontalContentAlignment="Left" Click="ClearDataB_Click"/>
+                    <Button FocusVisualStyle="{x:Null}" x:Name="LogoutB" BorderBrush="{x:Null}" Padding="9.6,5,1,5" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito Light" FontSize="15" Content="Log out" Background="#FFF9F9F9" Foreground="#FF3E3E3E" Style="{DynamicResource MenusButtonsStyle}" Click="LogoutB_Click" HorizontalContentAlignment="Left"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Grid x:Name="NotificationsG" Grid.RowSpan="5" Visibility="Collapsed">
+            <Grid x:Name="NotificationsOpacityG" Background="Black" Opacity="0.2" MouseLeftButtonUp="NotificationsOpacityG_MouseLeftButtonUp"></Grid>
+            <Grid x:Name="NotificationsBorderG"  HorizontalAlignment="Left" MinWidth="150" MaxWidth="350" MaxHeight="400" VerticalAlignment="Top"  Margin="10.826,110,10.826,10.826" >
+                <Border x:Name="NotificationsBorder" Visibility="Visible" CornerRadius="2" Padding="0,5" Background="#FFF9F9F9" BorderThickness="1.5" Margin="0,10,0,30" ClipToBounds="True" BorderBrush="#FFF9F9F9">
+                    <ScrollViewer x:Name="NotificationsSV" VerticalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="NotificationsSP">
+                            <local:CircleLoader x:Name="NotificationsLoaderCL" Height="200"></local:CircleLoader>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+                <Path Data="M0.5,0.5 L8.5,0.5 0.5,8.5 z" Fill="#FFF9F9F9" HorizontalAlignment="Left" Height="13.242" Margin="11.833,4.46,0,0" Stretch="Fill" Stroke="#FFF9F9F9" VerticalAlignment="Top" Width="13.242" RenderTransformOrigin="0.5,0.5">
+                    <Path.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="45"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Path.RenderTransform>
+                </Path>
+                <Button x:Name="ClearAllNotificationB" Visibility="Collapsed"  Opacity="1" FocusVisualStyle="{x:Null}" Background="#FFF9F9F9" BorderBrush="#FFFF4757" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold" Height="25" VerticalAlignment="Bottom" Margin="0,0,0,0" Style="{DynamicResource ClearAllButtonStyle}" Foreground="#FFFF4757" Click="ClearAllNotificationB_Click" Cursor="Hand">Clear all</Button>
+            </Grid>
         </Grid>
     </Grid>
 </Window>
