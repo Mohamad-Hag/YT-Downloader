@@ -61,12 +61,13 @@ namespace YT_Downloader
         {
             InitializeComponent();
             Instance = this;
+            TransitionTask = new Task(() => { });
             Button b1 = new Button();
             Button b2 = new Button();
             LastClickedButtons.Add(b1);
             LastClickedButtons.Add(b2);
             UsernameRN.Text = Properties.Settings.Default.Username;
-            UserIdLB.Content = Properties.Settings.Default.Id;       
+            UserIdLB.Content = Properties.Settings.Default.Id;            
         }
 
         #region Custom Methods
