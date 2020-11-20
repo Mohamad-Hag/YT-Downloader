@@ -1,19 +1,11 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using YT_Downloader.Classes;
 
 namespace YT_Downloader
@@ -23,7 +15,7 @@ namespace YT_Downloader
     /// </summary>
     public partial class NotificationItem : UserControl
     {
-        private int DismissAnimationDuration = 300;
+        private const int DismissAnimationDuration = 300;
 
         public int NotificationId
         {
@@ -76,10 +68,11 @@ namespace YT_Downloader
             command.Parameters.AddWithValue("@id", NotificationId);
             dc.Execute(command, "DELETE FROM notifications WHERE NotificationId=@id");
             dc.Unconnect();
-            if(sp.Children.Count == 0)
+            if (sp.Children.Count == 1)
             {
                 MainWindow.Instance.NotificationsG.Visibility = Visibility.Collapsed;
             }
+            
         }
 
         private void UC_Loaded(object sender, RoutedEventArgs e)

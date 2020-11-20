@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Forms;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Text.RegularExpressions;
-using MySql.Data.MySqlClient;
-using System.Threading;
-using System.Configuration;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace YT_Downloader.Classes
 {
     class Account
-    {
+    {        
         private int Id { get; set; }
         private string Username { get; set; }
         private string Email { get; set; }
@@ -27,7 +20,7 @@ namespace YT_Downloader.Classes
             Email = email.Trim();
             Password = password.Trim();
             Message = "".Trim();
-            UserSettigs = new Settings();            
+            UserSettigs = new Settings();
             UserSettigs.Email = Email;
             UserSettigs.Password = Password;
         }
@@ -48,6 +41,7 @@ namespace YT_Downloader.Classes
             UserSettigs.Password = Password;
             UserSettigs = settings;
         }
+
         public bool ShowMessage()
         {
             if (!Message.Equals(string.Empty))
@@ -82,9 +76,9 @@ namespace YT_Downloader.Classes
                 MySqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                     id = Convert.ToInt32(reader["AccountId"]);
-                
+
             }
-            catch (Exception e)
+            catch
             {
                 MessageBox.Show("Something went wrong.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -107,7 +101,7 @@ namespace YT_Downloader.Classes
                     username = reader["Username"].ToString();
                 dc.Unconnect();
             }
-            catch (Exception e)
+            catch
             {
                 MessageBox.Show("Something went wrong.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -259,7 +253,7 @@ namespace YT_Downloader.Classes
         }
         public Task Enter()
         {
-            Task enter = new Task(async() =>
+            Task enter = new Task(async () =>
             {
                 await Login();
             });

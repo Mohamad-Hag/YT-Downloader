@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MySql.Data;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System.Configuration;
 using System.Data;
-using System.Windows.Forms;
 
 namespace YT_Downloader.Classes
 {
@@ -15,7 +8,7 @@ namespace YT_Downloader.Classes
     {
         private string DatabaseName { get; set; }
         private MySqlConnection Connection = new MySqlConnection();
-        public  DatabaseConnectivity()
+        public DatabaseConnectivity()
         {
             Connection.ConnectionString = ConfigurationManager.ConnectionStrings["Connection"].ConnectionString;
         }

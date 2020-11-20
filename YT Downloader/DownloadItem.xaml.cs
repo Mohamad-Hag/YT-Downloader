@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace YT_Downloader
 {
@@ -53,7 +44,7 @@ namespace YT_Downloader
         }
 
         private void UC_Loaded(object sender, RoutedEventArgs e)
-        {            
+        {
             if (IsDownloaded)
             {
                 Pause_Countinue_OpenDownloadB.Content = "\uED25";
@@ -95,7 +86,7 @@ namespace YT_Downloader
 
         private void Pause_Countinue_OpenDownloadB_Click(object sender, RoutedEventArgs e)
         {
-            if((string)Pause_Countinue_OpenDownloadB.Content != "\uED25")
+            if ((string)Pause_Countinue_OpenDownloadB.Content != "\uED25")
             {
                 if ((string)Pause_Countinue_OpenDownloadB.Content == "\uE769")
                 {
@@ -115,7 +106,7 @@ namespace YT_Downloader
                 DownloadsPage.Instance.DownloadedSP.Children.Remove(this);
                 MainWindow.Instance.ShowMessage("Item removed from downloaded list.", MessageType.Success);
 
-            }        
+            }
         }
     }
 }

@@ -1,5 +1,8 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -8,11 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using System.Text.RegularExpressions;
 using YT_Downloader.Classes;
-using MySql.Data.MySqlClient;
-using System.Net;
-using System.Diagnostics;
 
 namespace YT_Downloader
 {
@@ -27,28 +26,28 @@ namespace YT_Downloader
     {
         public static MainWindow Instance;
 
-        private string MessageErrorBackground = "#FFF9C3CB";
-        private string MessageErrorForeground = "#FFBF0818";
-        private string MessageErrorIcon = "\uEA39";
+        private const string MessageErrorBackground = "#FFF9C3CB";
+        private const string MessageErrorForeground = "#FFBF0818";
+        private const string MessageErrorIcon = "\uEA39";
 
-        private string MessageWarningBackground = "#FFF9EFC3";
-        private string MessageWarningForeground = "#FFEEB800";
-        private string MessageWarningIcon = "\uE7BA";
+        private const string MessageWarningBackground = "#FFF9EFC3";
+        private const string MessageWarningForeground = "#FFEEB800";
+        private const string MessageWarningIcon = "\uE7BA";
 
-        private string MessageInformationBackground = "#FFC3F4F9";
-        private string MessageInformationForeground = "#FF008C9B";
-        private string MessageInformationIcon = "\uE946";
+        private const string MessageInformationBackground = "#FFC3F4F9";
+        private const string MessageInformationForeground = "#FF008C9B";
+        private const string MessageInformationIcon = "\uE946";
 
-        private string MessageSuccessBackground = "#FFC3F9C3";
-        private string MessageSuccessForeground = "#FF00AE00";
-        private string MessageSuccessIcon = "\uE73E";
+        private const string MessageSuccessBackground = "#FFC3F9C3";
+        private const string MessageSuccessForeground = "#FF00AE00";
+        private const string MessageSuccessIcon = "\uE73E";
 
         private DispatcherTimer MessageTimer = new DispatcherTimer();
         private DispatcherTimer HideMessageTimer = new DispatcherTimer();
 
         private Task t1, t2;
 
-        private int TransitionTime = 200;
+        private const int TransitionTime = 200;
         private Task TransitionTask;
 
         public SettingsPage sp = new SettingsPage();
@@ -56,18 +55,19 @@ namespace YT_Downloader
 
         public List<Button> LastClickedButtons = new List<Button>();
 
-        private int ClearAllAnimationDuration = 300;
+        private const int ClearAllAnimationDuration = 300;
+
+        private int CurrentNotificationsCount = 0;
         public MainWindow()
         {
             InitializeComponent();
             Instance = this;
-            TransitionTask = new Task(() => { });
             Button b1 = new Button();
             Button b2 = new Button();
             LastClickedButtons.Add(b1);
             LastClickedButtons.Add(b2);
             UsernameRN.Text = Properties.Settings.Default.Username;
-            UserIdLB.Content = Properties.Settings.Default.Id;            
+            UserIdLB.Content = Properties.Settings.Default.Id;
         }
 
         #region Custom Methods
@@ -82,7 +82,7 @@ namespace YT_Downloader
                 request = null;
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 request = null;
                 return false;
@@ -90,48 +90,61 @@ namespace YT_Downloader
         }
         private async void CheckNotificationsCount()
         {
-            if (IsInternetAvailable())
+            if (!IsInternetAvailable())
+                ShowMessage("Check your internet connection and try again", MessageType.Error);
+            try
             {
-                try
+                while (true)
                 {
-                    while (true)
+                    int count = 0;
+                    await Task.Delay(200);
+                    DatabaseConnectivity dc = new DatabaseConnectivity();
+                    await Task.Run(() =>
                     {
-                        int count = 0;
-                        await Task.Delay(200);
-                        DatabaseConnectivity dc = new DatabaseConnectivity();
-                        dc.Connect();
-                        MySqlCommand command = new MySqlCommand();
-                        command.Parameters.AddWithValue("@id", UserIdLB.Content);
-                        dc.ExecuteReader(command, "SELECT * FROM notifications WHERE AccountId=@id and IsRead=0");
-                        MySqlDataReader reader = command.ExecuteReader();
-                        while (reader.Read())
+                        if (dc.Connect())
                         {
-                            count++;
-                        }
-                        var template = ViewNotificationsB.Template;
-                        TextBlock notificationCount = (TextBlock)template.FindName("NotificationCountTBl", ViewNotificationsB);
-                        Border notificationBorder = (Border)template.FindName("NotificationBorder", ViewNotificationsB);
-                        if (count > 0)
-                        {
-                            notificationBorder.Visibility = Visibility.Visible;
-                            notificationCount.Text = count.ToString();
+                            MySqlCommand command = new MySqlCommand();
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                command.Parameters.AddWithValue("@id", UserIdLB.Content);
+                            });
+                            dc.ExecuteReader(command, "SELECT * FROM notifications WHERE AccountId=@id and IsRead=0");
+                            MySqlDataReader reader = command.ExecuteReader();
+                            while (reader.Read())
+                            {
+                                count++;
+                            }
+                            var template = ViewNotificationsB.Template;
+                            TextBlock notificationCount = (TextBlock)template.FindName("NotificationCountTBl", ViewNotificationsB);
+                            Border notificationBorder = (Border)template.FindName("NotificationBorder", ViewNotificationsB);
+                            if (count > 0)
+                            {
+                                this.Dispatcher.Invoke(() =>
+                                {
+                                    notificationBorder.Visibility = Visibility.Visible;
+                                    notificationCount.Text = count.ToString();
+                                });
+                            }
+                            else
+                            {
+                                this.Dispatcher.Invoke(() =>
+                                {
+                                    if (notificationBorder.Visibility == Visibility.Visible)
+                                        notificationBorder.Visibility = Visibility.Collapsed;
+                                });
+                            }
+                            dc.Unconnect();
+
                         }
                         else
                         {
-                            if (notificationBorder.Visibility == Visibility.Visible)
-                                notificationBorder.Visibility = Visibility.Collapsed;
+
                         }
-                        dc.Unconnect();
-                    }
-
+                    });
+                    CurrentNotificationsCount = count;
                 }
-                catch
-                {
-                    ShowMessage("Check your internet connection and try again", MessageType.Error);
-                }
-
             }
-            else
+            catch
             {
                 ShowMessage("Check your internet connection and try again", MessageType.Error);
             }
@@ -434,6 +447,7 @@ namespace YT_Downloader
         }
         public void TransitionMove(bool IsOpen)
         {
+            TransitionTask ??= new Task(() => { });
             if (TransitionTask.Status != TaskStatus.Running)
             {
                 new Thread(() =>
@@ -646,7 +660,9 @@ namespace YT_Downloader
 
         private async void ViewNotificationsB_Click(object sender, RoutedEventArgs e)
         {
+            ClearAllNotificationB.Visibility = Visibility.Collapsed;
             NotificationsSP.Children.Clear();
+            NotificationsSP.Children.Add(NotificationsLoaderCL);
             TranslateTransform tt = new TranslateTransform();
             tt.X = 0;
             tt.Y = 0;
@@ -655,43 +671,52 @@ namespace YT_Downloader
             NotificationsG.Visibility = Visibility.Visible;
             NotificationsLoaderCL.Start();
             int count = 0;
+            List<NotificationItem> notificationItems = new List<NotificationItem>();
             try
             {
                 await Task.Run(new Action(() =>
                 {
-                    this.Dispatcher.Invoke(() =>
+                    try
                     {
-                        try
+                        DatabaseConnectivity dc = new DatabaseConnectivity();
+                        dc.Connect();
+                        MySqlCommand command = new MySqlCommand();
+                        this.Dispatcher.Invoke(() =>
                         {
-                            DatabaseConnectivity dc = new DatabaseConnectivity();
-                            dc.Connect();
-                            MySqlCommand command = new MySqlCommand();
                             command.Parameters.AddWithValue("@id", UserIdLB.Content);
-                            dc.ExecuteReader(command, "SELECT * FROM notifications WHERE AccountId=@id");
-                            MySqlDataReader reader = command.ExecuteReader();
-                            while (reader.Read())
+                        });
+                        dc.ExecuteReader(command, "SELECT * FROM notifications WHERE AccountId=@id");
+                        MySqlDataReader reader = command.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            count++;
+                            this.Dispatcher.Invoke(() =>
                             {
-                                count++;
                                 NotificationItem ni = new NotificationItem();
                                 ni.Padding = new Thickness(10);
                                 ni.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF9F9F9"));
                                 ni.Notification = reader["Message"].ToString();
                                 ni.NotificationDate = Convert.ToDateTime(reader["Date"]);
                                 ni.NotificationId = Convert.ToInt32(reader["NotificationId"]);
-                                NotificationsSP.Children.Add(ni);
-                                DatabaseConnectivity dc1 = new DatabaseConnectivity();
-                                dc1.Connect();
+                                notificationItems.Add(ni);
+                            });
+                            DatabaseConnectivity dc1 = new DatabaseConnectivity();
+                            dc1.Connect();
+                            this.Dispatcher.Invoke(() =>
+                            {
                                 dc1.ExecuteNonQuery("UPDATE notifications Set IsRead=1 WHERE AccountId=" + UserIdLB.Content);
-                                dc1.Unconnect();
-                            }
+                            });
+                            dc1.Unconnect();
                         }
-                        catch (Exception)
+                    }
+                    catch (Exception)
+                    {
+                        this.Dispatcher.Invoke(() =>
                         {
-
-                            throw;
-                        }
-
-                    });
+                            ShowMessage("Check your internet connection and try again", MessageType.Error);
+                        });
+                        count = -1;
+                    }
                 }));
             }
             catch
@@ -702,20 +727,40 @@ namespace YT_Downloader
                 NotificationsG.Visibility = Visibility.Collapsed;
                 ShowMessage("Check your internet connection and try again", MessageType.Error);
             }
-            NotificationsLoaderCL.Visibility = Visibility.Collapsed;
-            NotificationsLoaderCL.Stop();
-            ClearAllNotificationB.Visibility = Visibility.Visible;
-            if (count == 0)
+            if (!count.Equals(-1))
             {
-                TextBlock tb = new TextBlock();
-                tb.Padding = new Thickness(25);
-                tb.FontSize = 15;
-                tb.Text = "No Notification...";
-                tb.VerticalAlignment = VerticalAlignment.Center;
-                tb.HorizontalAlignment = HorizontalAlignment.Center;
-                tb.FontFamily = new FontFamily(new Uri(@"pack:\\,,,\Resources\Fonts\Nunito-SemiBold.ttf"), "Nunito SemiBold");
-                NotificationsSP.Children.Add(tb);
-                ClearAllNotificationB.Visibility = Visibility.Collapsed;
+                if (count.Equals(0))
+                {
+                    TextBlock tb = new TextBlock();
+                    tb.Padding = new Thickness(25);
+                    tb.FontSize = 15;
+                    tb.Text = "No Notification...";
+                    tb.VerticalAlignment = VerticalAlignment.Center;
+                    tb.HorizontalAlignment = HorizontalAlignment.Center;
+                    tb.FontFamily = new FontFamily(new Uri(@"pack:\\,,,\Resources\Fonts\Nunito-SemiBold.ttf"), "Nunito SemiBold");
+                    NotificationsSP.Children.Add(tb);
+                    ClearAllNotificationB.Visibility = Visibility.Collapsed;
+                }
+                foreach (NotificationItem ni in notificationItems)
+                {
+                    NotificationsSP.Children.Insert(0, ni);
+                }
+                //for (int i = 0; i < CurrentNotificationsCount; i++)
+                //{
+                //    ControlTemplate template = notificationItems[i].Template;
+                //    Border border = (Border)template.FindName("border", notificationItems[i]);
+                //    border.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE0EBFF")); ;
+                //}
+                NotificationsLoaderCL.Visibility = Visibility.Collapsed;
+                NotificationsLoaderCL.Stop();
+                if (!count.Equals(0))
+                    ClearAllNotificationB.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                NotificationsLoaderCL.Visibility = Visibility.Collapsed;
+                NotificationsLoaderCL.Stop();
+                NotificationsG.Visibility = Visibility.Collapsed;
             }
         }
     }

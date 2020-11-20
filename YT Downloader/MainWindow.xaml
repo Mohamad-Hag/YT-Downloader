@@ -747,7 +747,7 @@
                 <Border x:Name="NotificationsBorder" Visibility="Visible" CornerRadius="2" Padding="0,5" Background="#FFF9F9F9" BorderThickness="1.5" Margin="0,10,0,30" ClipToBounds="True" BorderBrush="#FFF9F9F9">
                     <ScrollViewer x:Name="NotificationsSV" VerticalScrollBarVisibility="Auto">
                         <StackPanel x:Name="NotificationsSP">
-                            <local:CircleLoader x:Name="NotificationsLoaderCL" Height="200"></local:CircleLoader>
+                            <local:CircleLoader x:Name="NotificationsLoaderCL" Height="200" Width="200"></local:CircleLoader>
                         </StackPanel>
                     </ScrollViewer>
                 </Border>
