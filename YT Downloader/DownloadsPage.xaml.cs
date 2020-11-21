@@ -31,6 +31,7 @@ namespace YT_Downloader
             Border border2 = (Border)template2.FindName("border", ins.ViewSettingsB);
             border2.BorderThickness = new Thickness(1);
             border2.BorderBrush = Brushes.White;
+            ins.HomeG.IsEnabled = true;
         }
     }
 }

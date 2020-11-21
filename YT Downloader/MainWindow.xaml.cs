@@ -99,48 +99,55 @@ namespace YT_Downloader
                     int count = 0;
                     await Task.Delay(200);
                     DatabaseConnectivity dc = new DatabaseConnectivity();
-                    await Task.Run(() =>
+                    try
                     {
-                        if (dc.Connect())
+                        await Task.Run(() =>
                         {
-                            MySqlCommand command = new MySqlCommand();
-                            this.Dispatcher.Invoke(() =>
+                            if (dc.Connect())
                             {
-                                command.Parameters.AddWithValue("@id", UserIdLB.Content);
-                            });
-                            dc.ExecuteReader(command, "SELECT * FROM notifications WHERE AccountId=@id and IsRead=0");
-                            MySqlDataReader reader = command.ExecuteReader();
-                            while (reader.Read())
-                            {
-                                count++;
-                            }
-                            var template = ViewNotificationsB.Template;
-                            TextBlock notificationCount = (TextBlock)template.FindName("NotificationCountTBl", ViewNotificationsB);
-                            Border notificationBorder = (Border)template.FindName("NotificationBorder", ViewNotificationsB);
-                            if (count > 0)
-                            {
+                                MySqlCommand command = new MySqlCommand();
                                 this.Dispatcher.Invoke(() =>
                                 {
-                                    notificationBorder.Visibility = Visibility.Visible;
-                                    notificationCount.Text = count.ToString();
+                                    command.Parameters.AddWithValue("@id", UserIdLB.Content);
                                 });
+                                dc.ExecuteReader(command, "SELECT * FROM notifications WHERE AccountId=@id and IsRead=0");
+                                MySqlDataReader reader = command.ExecuteReader();
+                                while (reader.Read())
+                                {
+                                    count++;
+                                }
+                                var template = ViewNotificationsB.Template;
+                                TextBlock notificationCount = (TextBlock)template.FindName("NotificationCountTBl", ViewNotificationsB);
+                                Border notificationBorder = (Border)template.FindName("NotificationBorder", ViewNotificationsB);
+                                if (count > 0)
+                                {
+                                    this.Dispatcher.Invoke(() =>
+                                    {
+                                        notificationBorder.Visibility = Visibility.Visible;
+                                        notificationCount.Text = count.ToString();
+                                    });
+                                }
+                                else
+                                {
+                                    this.Dispatcher.Invoke(() =>
+                                    {
+                                        if (notificationBorder.Visibility == Visibility.Visible)
+                                            notificationBorder.Visibility = Visibility.Collapsed;
+                                    });
+                                }
+                                dc.Unconnect();
+
                             }
                             else
                             {
-                                this.Dispatcher.Invoke(() =>
-                                {
-                                    if (notificationBorder.Visibility == Visibility.Visible)
-                                        notificationBorder.Visibility = Visibility.Collapsed;
-                                });
+
                             }
-                            dc.Unconnect();
+                        });
+                    }
+                    catch
+                    {
 
-                        }
-                        else
-                        {
-
-                        }
-                    });
+                    }
                     CurrentNotificationsCount = count;
                 }
             }
@@ -515,7 +522,7 @@ namespace YT_Downloader
             TransitionMove(true);
             MainFrame.Content = dp;
             LastClickedButtons.Add(ViewDownloadsB);
-
+            HomeG.IsEnabled = false;
         }
 
         private void ViewSettingsB_Click(object sender, RoutedEventArgs e)
@@ -533,7 +540,7 @@ namespace YT_Downloader
             TransitionMove(true);
             MainFrame.Content = sp;
             LastClickedButtons.Add(ViewSettingsB);
-
+            HomeG.IsEnabled = false;
         }
 
         private void AcconutPerferencesTBl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

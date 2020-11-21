@@ -72,7 +72,7 @@ namespace YT_Downloader
             {
                 MainWindow.Instance.NotificationsG.Visibility = Visibility.Collapsed;
             }
-            
+
         }
 
         private void UC_Loaded(object sender, RoutedEventArgs e)

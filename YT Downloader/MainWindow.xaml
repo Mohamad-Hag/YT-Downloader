@@ -164,11 +164,9 @@
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="true">
                                 <Setter Property="Background" TargetName="border" Value="#70a1ff"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="#70a1ff"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="true">
                                 <Setter Property="Background" TargetName="border" Value="#FF63B2FF"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="#FF63B2FF"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="false">
                                 <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
@@ -674,7 +672,7 @@
         </DockPanel>
         <ScrollViewer Grid.Row="3" >
             <Border Padding="5">
-                <Grid Background="White">
+                <Grid x:Name="HomeG" Background="White">
                     <TextBlock Height="Auto" Width="Auto" Text="Video Url" VerticalAlignment="Top" Margin="20,14.5,0,0" FontSize="17" FontWeight="SemiBold" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold" Foreground="#FF444444"/>
                     <TextBox x:Name="UrlTB" BorderThickness="2" VerticalContentAlignment="Center" Padding="5" FontSize="15" Height="35" Margin="20,44,107,0" VerticalAlignment="Top" Style="{DynamicResource TextBoxStyle}" TextChanged="UrlTB_TextChanged" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold" SelectionBrush="#FFA7D6FF" KeyDown="UrlTB_KeyDown">
                         <!--<TextBox.CommandBindings>
@@ -684,7 +682,7 @@
                     <KeyBinding Command="{x:Static local:CustomShortcutsCommands.Check}" Key="S" Modifiers="Ctrl"></KeyBinding>
                 </TextBox.InputBindings>-->
                     </TextBox>
-                    <Button BorderThickness="1" x:Name="CheckB" IsEnabled="False" Content="Check" HorizontalAlignment="Right" Height="35" Margin="0,44,0,0" VerticalAlignment="Top" Padding="25,0,25,0" FontSize="18" RenderTransformOrigin="0.759,0.7" BorderBrush="DodgerBlue" Background="DodgerBlue" Foreground="White" Style="{DynamicResource DefaultButtonsStyle}" Click="CheckB_Click" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold"/>
+                    <Button BorderThickness="1" x:Name="CheckB" IsEnabled="False" Content="Check" HorizontalAlignment="Right" Height="35" Margin="0,44,0,0" VerticalAlignment="Top" Padding="25,0,25,0" FontSize="18" RenderTransformOrigin="0.759,0.7" BorderBrush="{x:Null}" Background="DodgerBlue" Foreground="White" Style="{DynamicResource DefaultButtonsStyle}" Click="CheckB_Click" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold"/>
                     <TextBlock HorizontalAlignment="Left" Height="Auto" Width="Auto" Text="Format" VerticalAlignment="Top" Margin="20,204,0,0" FontSize="17" FontWeight="SemiBold" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold" Foreground="#FF444444"/>
                     <ComboBox x:Name="QualityCBX" FocusVisualStyle="{x:Null}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="5" FontSize="18" Height="35" Margin="179.999,233.5,0,0" Width="130" VerticalAlignment="Top" HorizontalAlignment="Left" Style="{DynamicResource QualityComboBoxStyle}" BorderBrush="#CCCCCCCC" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold">
                         <ComboBoxItem FocusVisualStyle="{x:Null}" Height="30" Content="1080p"/>
@@ -715,13 +713,14 @@
                     <KeyBinding Command="{x:Static local:CustomShortcutsCommands.Check}" Key="S" Modifiers="Ctrl"></KeyBinding>
                 </TextBox.InputBindings>-->
                     </TextBox>
-                    <Button x:Name="BrowseB" FocusVisualStyle="{x:Null}" IsEnabled="True" Content="Browse" HorizontalAlignment="Right" Height="35" Margin="0,140,0,0" VerticalAlignment="Top" Padding="25,0,25,0" FontSize="18" RenderTransformOrigin="0.759,0.7" BorderBrush="DodgerBlue" Background="DodgerBlue" Foreground="White" Style="{DynamicResource DefaultButtonsStyle}" Click="BrowseB_Click" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold"/>
+                    <Button x:Name="BrowseB" FocusVisualStyle="{x:Null}" IsEnabled="True" Content="Browse" HorizontalAlignment="Right" Height="35" Margin="0,140,0,0" VerticalAlignment="Top" Padding="25,0,25,0" FontSize="18" RenderTransformOrigin="0.759,0.7" BorderBrush="{x:Null}" Background="DodgerBlue" Foreground="White" Style="{DynamicResource DefaultButtonsStyle}" Click="BrowseB_Click" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold"/>
                     <local:CircleLoader x:Name="CheckCL" Visibility="Collapsed" Background="White"></local:CircleLoader>
                 </Grid>
             </Border>
         </ScrollViewer>
-        <Grid Grid.Row="4" Background="#FFEEEEEE">
-            <Button x:Name="DownloadB" BorderThickness="1.5" IsEnabled="False" Content="Download" HorizontalAlignment="Right" Height="35" VerticalAlignment="Center" Padding="25,0,25,0" FontSize="18" Margin="0,0,20,0" Foreground="White" Background="DodgerBlue" BorderBrush="DodgerBlue" Style="{DynamicResource DefaultButtonsStyle}" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold" Click="DownloadB_Click" />
+        <Grid Grid.Row="4" Background="White">
+            <Rectangle Height="1" VerticalAlignment="Top" Fill="#FFEEEEEE"></Rectangle>
+            <Button x:Name="DownloadB" BorderThickness="1.5" IsEnabled="False" Content="Download" HorizontalAlignment="Right" Height="35" VerticalAlignment="Center" Padding="25,0,25,0" FontSize="18" Margin="0,0,20,0" Foreground="White" Background="DodgerBlue" Style="{DynamicResource DefaultButtonsStyle}" FontFamily="/YT Downloader;component/Resources/Fonts/#Nunito SemiBold" Click="DownloadB_Click" BorderBrush="{x:Null}" />
         </Grid>
         <Grid x:Name="CoverG" Grid.RowSpan="2" Grid.Row="3" Background="White" Visibility="Collapsed"></Grid>
         <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Grid.Row="3" Grid.RowSpan="2" Background="White">
